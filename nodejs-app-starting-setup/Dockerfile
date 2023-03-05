@@ -1,5 +1,7 @@
 # taking base image from node in Docker Hub
-FROM node
+# specify version of node to use (latest is not recommended)
+# using tag to denote the version of node to use
+FROM node:14
 
 # setting working directory (best practice to use /app instead of just root) 
 WORKDIR /app
@@ -44,3 +46,13 @@ CMD ["node", "server.js"]
 # docker rmi <image-id> to remove an image
 # docker rmi $(docker images -a -q) to remove all images
 # docker run -p 3000:80 -d --rm <image-id> to run a container and remove it when it stops 
+# docker image inspect <image-id> to view metadata of an image
+
+# docker cp <container-id>:/app/server.js . to copy a file from a container to local
+# docker cp server.js <container-id>:/app to copy a file from local to a container
+
+# docker naming for container and images
+# docker run -p 3000:80 -d --name <container-name> <image-name>
+# docker build -t <image-name> . -> docker build -t goals:latest .
+# docker run -p 3000:80 -d --rm  --name goalsapp goals:latest
+# docker stop goalsapp (stop container)
