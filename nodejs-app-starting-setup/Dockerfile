@@ -24,3 +24,13 @@ CMD ["node", "server.js"]
 # impt commands to build and run the image
 # docker build .
 # docker run -p 3000:80 <image-id> localhost:3000 will be mapped to port 80 in container
+
+# docker run by default is in attached mode
+# to run in detached mode, use -d flag
+# docker run -d -p 3000:80 <image-id>
+
+# docker start <container-id> to start a stopped container by default in detached mode
+# docker start -a <container-id> to start a stopped container in attached mode
+
+# docker logs <container-id> to view logs of a running container
+# docker logs -f <container-id> to view logs of a running container in real time
