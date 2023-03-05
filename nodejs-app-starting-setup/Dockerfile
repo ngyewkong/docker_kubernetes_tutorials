@@ -34,3 +34,13 @@ CMD ["node", "server.js"]
 
 # docker logs <container-id> to view logs of a running container
 # docker logs -f <container-id> to view logs of a running container in real time
+
+# docker stop <container-id> to stop a running container
+# docker ps -a to view all containers
+# docker rm <container-id> to remove a stopped container
+# docker container/image/system prune to remove all stopped containers, images, and unused data
+
+# docker images to view all images
+# docker rmi <image-id> to remove an image
+# docker rmi $(docker images -a -q) to remove all images
+# docker run -p 3000:80 -d --rm <image-id> to run a container and remove it when it stops 
