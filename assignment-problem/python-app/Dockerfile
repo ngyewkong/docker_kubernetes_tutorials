@@ -5,7 +5,7 @@ FROM python
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY . /app
+COPY . .
 
 # CMD to invoke python command to run the server (not executed when building image but when creating container)
 CMD ["python", "bmi.py"]
