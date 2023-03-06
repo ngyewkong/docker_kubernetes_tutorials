@@ -45,3 +45,16 @@ CMD ["node", "server.js"]
 
 # Part 6 Assignment
 # docker run -d -p 8000:3000 --rm --name node-server-app node-server:v1
+
+# Docker Push Image to Docker Hub (or other registry)
+# docker login
+# docker push <image id>:<tag>
+# to rename existing image (clone image)
+# docker tag <image id> <docker hub username>/<image name>:<tag>
+# eg docker tag node-server:v1 ngyewkong/node-hello-world
+
+# Docker Pull Image from Docker Hub (or other registry)
+# docker image prune -a (remove all images)
+# docker pull <docker hub username>/<image name>:<tag>
+# eg docker pull ngyewkong/node-hello-world
+# docker run -d -p 3000:3000 --rm ngyewkong/node-hello-world
