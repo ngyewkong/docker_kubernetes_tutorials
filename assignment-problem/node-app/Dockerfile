@@ -5,13 +5,13 @@ FROM node
 WORKDIR /app
 
 # copy package.json first to optimise build
-COPY package.json /app
+COPY package.json .
 
 # RUN to invoke node commands to install dependencies
 RUN npm install
 
 # copy from the current directory on local to container directory /app
-COPY . /app
+COPY . .
 
 # Document the exposed port (app is listening on port 3000)
 EXPOSE 3000
