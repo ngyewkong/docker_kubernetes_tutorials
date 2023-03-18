@@ -16,6 +16,9 @@ COPY . /app
 # Document the exposed port (app is listening on port 80)
 EXPOSE 80
 
+# volume to persist data (this sets anonymous volume)
+VOLUME ["/app/feedback"]
+
 # CMD to invoke node command to run the server (not executed when building image but when creating container)
 CMD ["node", "server.js"]
 
@@ -31,3 +34,11 @@ CMD ["node", "server.js"]
 # docker run -p 1000:80 -d --name feedback-node-app feedback-node
 # docker stop feedback-node-app
 # docker start feedback-node-app
+
+# build a new image with the updated docker file to use volume to persist data
+# docker build -t feedback-node-with-volumes .
+# docker run -p 2000:80 -d --rm --name feedback-node-app-with-volumes feedback-node-with-volumes
+# error when saving file to feedback directory
+# docker logs feedback-node-app-with-volumes
+# reason: node fs.rename() do not allow cross devices (Docker under the hood is not just moving the file to another dir in the container file system but moving out of the container)
+# workaround: use node fs.copyFile() & fs.unlink(tempFilePath) instead
