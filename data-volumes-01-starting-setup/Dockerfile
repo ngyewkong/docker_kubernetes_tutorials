@@ -44,3 +44,13 @@ CMD ["node", "server.js"]
 # reason: node fs.rename() do not allow cross devices (Docker under the hood is not just moving the file to another dir in the container file system but moving out of the container)
 # workaround: use node fs.copyFile() & fs.unlink(tempFilePath) instead
 # docker volume ls -> get the volume in use
+
+# for createing a named volume
+# docker build -t feedback-node:volumes . 
+# docker run -d -p 3000:80 --rm --name feedback-app -v {folder_name that we chose}:/app/feedback feedback-node:volumes 
+# eg. docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback feedback-node:volumes 
+# named volumes will not be deleted when container shut down with --rm tag
+# named volumes are not attached to a specific container
+# docker volume ls -> will see a volume with driver local and volume name feedback
+# stopping a container that was created with a --rm tag will not remove the named volume 
+# can create another container and attach it to the same volume and will see the same data again
