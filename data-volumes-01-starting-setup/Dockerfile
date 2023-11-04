@@ -18,7 +18,7 @@ EXPOSE 80
 
 # # volume to persist data (this sets anonymous volume)
 # # named volume cannot create in Dockerfile -> have to create in cli
-# VOLUME ["/app/feedback"]
+# VOLUME ["/app/node_modules"]
 
 # CMD to invoke node command to run the server (not executed when building image but when creating container)
 CMD ["node", "server.js"]
@@ -54,3 +54,30 @@ CMD ["node", "server.js"]
 # docker volume ls -> will see a volume with driver local and volume name feedback
 # stopping a container that was created with a --rm tag will not remove the named volume 
 # can create another container and attach it to the same volume and will see the same data again
+
+# Bind mounts
+# for static files that need to reflect changes (eg. changes to html)
+# rebuilding image is not optimal
+# use of bind mounts (managed by us)
+# container can read and write to volumes 
+# container will always have the latest changes unlike snapshots from using anon and named volumes
+# set by using docker cli not in dockerfile also
+# bind mount shortcut -v $(pwd):/app
+# docker run -d -p 3000:80 --rm --name feedback-app -v {named_voluume_name}:{mapped to container path}
+# -v "{bind mount path on local - absolute path}:{mapped to container path}" feedback-node:volumes
+# eg. docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback 
+# -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app" feedback-node:volumes
+# need to make sure Docker has access to the file path for the bind mount
+# check in preferences -> resources -> file sharing and make sure the parent path is enabled eg /Users
+# error: goes to stopped container immediately 
+# debug using docker ps -a && docker logs {name of container} -> gets the error messages
+# /app folder gets overwritten (which has the dep installed via dockerfile)
+# since bind mount mount to the same mapped path in container /app
+# resolved using anon volumes -v /app/node_modules or specify in dockerfile (need rebuild the image)
+# docker resolves clashes by choosing the longer internal path 
+# meaning /app/node_modeules folder will survive (which is also the path node dep are installed by default with npm install)
+# /app still is mapped to bind mount 
+# eg. docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback 
+# -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app" 
+# -v /app/node_modules feedback-node:volumes
+# so now changes to the html is directly reflected in the running container
