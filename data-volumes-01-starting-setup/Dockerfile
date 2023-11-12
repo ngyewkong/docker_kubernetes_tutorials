@@ -83,3 +83,19 @@ CMD ["npm", "start"]
 # -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app" 
 # -v /app/node_modules feedback-node:volumes
 # so now changes to the html is directly reflected in the running container
+
+# Read Only Volumes
+# making sure that only changes can be made from the host file system and not from app container
+# this prevents changes from app affecting the bind mount
+# by default Volumes are read write
+# set a :ro to make it read only
+# eg. docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback 
+# -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
+# -v /app/node_modules feedback-node:volumes
+# however the above will make the /app path and sub path to be read only
+# but we need to write to temp and feedback dir inside /app
+# solution: add an anonymous volume (-v /app/temp) which will override the bind mount
+# as it is the longer container-internal-path
+# eg. docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback 
+# -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
+# -v /app/node_modules -v /app/temp feedback-node:volumes
