@@ -99,3 +99,9 @@ CMD ["npm", "start"]
 # eg. docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback 
 # -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
 # -v /app/node_modules -v /app/temp feedback-node:volumes
+
+# docker volume ls -> list docker volume
+# docker volume create volumeName -> create docker volume
+# docker volume inspect volumeName -> show more info of docker volume
+# docker volume rm volumeName -> remove docker volume
+# docker volume prune -> remove unused docker volumes
