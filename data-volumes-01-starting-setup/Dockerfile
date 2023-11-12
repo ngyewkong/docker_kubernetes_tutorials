@@ -21,7 +21,9 @@ EXPOSE 80
 # VOLUME ["/app/node_modules"]
 
 # CMD to invoke node command to run the server (not executed when building image but when creating container)
-CMD ["node", "server.js"]
+# update DockerFile to use start script which use nodemon server.js instead of node 
+# filewatcher for real time update to server code
+CMD ["npm", "start"]
 
 # impt commands to build and run the image
 # build image with tag feedback-node default latest is used if no tag is specified
