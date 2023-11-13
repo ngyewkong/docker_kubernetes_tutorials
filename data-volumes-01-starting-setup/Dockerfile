@@ -14,8 +14,12 @@ RUN npm install
 # we can don't copy for dev but we will want to have the snapshot images in production
 COPY . /app
 
+# adding env variables Port with default value 80
+ENV PORT 80
+
 # Document the exposed port (app is listening on port 80)
-EXPOSE 80
+# EXPOSE 80
+EXPOSE $PORT
 
 # # volume to persist data (this sets anonymous volume)
 # # named volume cannot create in Dockerfile -> have to create in cli
@@ -112,3 +116,11 @@ CMD ["npm", "start"]
 # eg. docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback 
 # -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
 # -v /app/node_modules -v /app/temp feedback-node:no-copy
+
+# use env to pass in value dynamically
+# add --env PORT={value} to pass in during docker run
+# shorthand use -e can use multiple for diff dynamic variables
+# can reference a .env file also using --env-file ./.env (in the same dir level)
+# docker run -d --rm -p 3000:8000 --env PORT=8000 --name feedback-app-env -v feedback:/app/feedback 
+# -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
+# -v /app/node_modules -v /app/temp feedback-node:env
