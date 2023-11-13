@@ -11,6 +11,7 @@ COPY package.json /app
 RUN npm install
 
 # copy from the current directory on local to container directory /app
+# we can don't copy for dev but we will want to have the snapshot images in production
 COPY . /app
 
 # Document the exposed port (app is listening on port 80)
@@ -105,3 +106,9 @@ CMD ["npm", "start"]
 # docker volume inspect volumeName -> show more info of docker volume
 # docker volume rm volumeName -> remove docker volume
 # docker volume prune -> remove unused docker volumes
+
+# create a container with no copy (comment out the copy cmd in Dockerfile)
+# docker build -t feedback-node:no-copy . 
+# eg. docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback 
+# -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
+# -v /app/node_modules -v /app/temp feedback-node:no-copy
