@@ -1,6 +1,9 @@
 # create Docker image from base image node
 FROM node:14
 
+# setting an argument for default port
+ARG DEFAULT_PORT=80
+
 # set working directory (best practice to use /app instead of just root)
 WORKDIR /app
 
@@ -15,7 +18,9 @@ RUN npm install
 COPY . /app
 
 # adding env variables Port with default value 80
-ENV PORT 80
+# we can use build time arg to make the default value dynamic (same dockerfile with diff default port during build)
+# by using ARG cmd
+ENV PORT ${DEFAULT_PORT}
 
 # Document the exposed port (app is listening on port 80)
 # EXPOSE 80
@@ -124,3 +129,8 @@ CMD ["npm", "start"]
 # docker run -d --rm -p 3000:8000 --env PORT=8000 --name feedback-app-env -v feedback:/app/feedback 
 # -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
 # -v /app/node_modules -v /app/temp feedback-node:env
+
+# use build arg
+# get two diff docker image with the same Dockerfile
+# eg docker build -t feedback-node:web-dev .
+# eg docker build -t feedback-node:dev --build-arg DEFAULT_PORT=8000 .
