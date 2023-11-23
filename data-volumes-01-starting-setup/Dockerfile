@@ -14,8 +14,22 @@ RUN npm install
 # we can don't copy for dev but we will want to have the snapshot images in production
 COPY . /app
 
+# shifting ARG & ENV at later part of Dockerfile
+# as these are additional layers
+# any changes to ARG or ENV -> will cause the subsequent layers to be rebuilt/re-executed
+# hence RUN npm install shld be in front 
+# as we do not want npm install to be re-executed every single time port number change
+# setting an argument for default port
+ARG DEFAULT_PORT=80
+
+# adding env variables Port with default value 80
+# we can use build time arg to make the default value dynamic (same dockerfile with diff default port during build)
+# by using ARG cmd
+ENV PORT ${DEFAULT_PORT}
+
 # Document the exposed port (app is listening on port 80)
-EXPOSE 80
+# EXPOSE 80
+EXPOSE $PORT
 
 # # volume to persist data (this sets anonymous volume)
 # # named volume cannot create in Dockerfile -> have to create in cli
@@ -112,3 +126,16 @@ CMD ["npm", "start"]
 # eg. docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback 
 # -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
 # -v /app/node_modules -v /app/temp feedback-node:no-copy
+
+# use env to pass in value dynamically
+# add --env PORT={value} to pass in during docker run
+# shorthand use -e can use multiple for diff dynamic variables
+# can reference a .env file also using --env-file ./.env (in the same dir level)
+# docker run -d --rm -p 3000:8000 --env PORT=8000 --name feedback-app-env -v feedback:/app/feedback 
+# -v "/Users/ngyewkong/Docker_Kubernetes/data-volumes-01-starting-setup:/app:ro" 
+# -v /app/node_modules -v /app/temp feedback-node:env
+
+# use build arg
+# get two diff docker image with the same Dockerfile
+# eg docker build -t feedback-node:web-dev .
+# eg docker build -t feedback-node:dev --build-arg DEFAULT_PORT=8000 .
