@@ -1,9 +1,6 @@
 # create Docker image from base image node
 FROM node:14
 
-# setting an argument for default port
-ARG DEFAULT_PORT=80
-
 # set working directory (best practice to use /app instead of just root)
 WORKDIR /app
 
@@ -16,6 +13,14 @@ RUN npm install
 # copy from the current directory on local to container directory /app
 # we can don't copy for dev but we will want to have the snapshot images in production
 COPY . /app
+
+# shifting ARG & ENV at later part of Dockerfile
+# as these are additional layers
+# any changes to ARG or ENV -> will cause the subsequent layers to be rebuilt/re-executed
+# hence RUN npm install shld be in front 
+# as we do not want npm install to be re-executed every single time port number change
+# setting an argument for default port
+ARG DEFAULT_PORT=80
 
 # adding env variables Port with default value 80
 # we can use build time arg to make the default value dynamic (same dockerfile with diff default port during build)
