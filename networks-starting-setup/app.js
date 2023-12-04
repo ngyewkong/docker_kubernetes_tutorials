@@ -68,14 +68,16 @@ app.get("/people", async (req, res) => {
 });
 
 app.listen(7000);
-// mongoose.connect(
-//   "mongodb://localhost:27017/swfavorites",
-//   { useNewUrlParser: true },
-//   (err) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       app.listen(6000);
-//     }
-//   }
-// );
+mongoose.connect(
+  // using host.docker.internal (special address which is understood by docker)
+  // translate to IP address of local host machine as seen from inside Docker container
+  "mongodb://host.docker.internal:27017/swfavorites",
+  { useNewUrlParser: true },
+  (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      app.listen(6000);
+    }
+  }
+);
