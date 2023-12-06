@@ -31,8 +31,13 @@ CMD [ "npm", "start" ]
 # update backend code to use container name instead of host.docker.internal
 # rebuild image (in backend code dir) 
 # docker build -t multi-container-node .
-# run the backend image 
-# docker run --name multi-container-backend --network multi-container-net --rm -d -p 80:80 multi-container-node
+# run the backend image (with named volumes to persist logs & bind mounts for live code update)
+# rmb longer container internal paths have precedents (do not get overwritten)
+# in this case /app/logs is longer than /app logs still persisted
+# use -e flag to update the default env var in dockerfile
+# docker run --name multi-container-backend --network multi-container-net 
+# -v /Users/ngyewkong/Docker_Kubernetes/multi-01-starting-setup/backend:/app -v logs:/app/logs -v /app/node_modules
+# -e MONGO_USERNAME=admin --rm -d -p 80:80 multi-container-node
 # update frontend code to use container name instead of localhost
 # WRONG BROWSER CLIENT CODE DO NOT UNDERSTAND CONTAINER NAME
 # MEANS BACKEND CONTAINER WILL NEED TO PUBLISH PORT 80 STILL

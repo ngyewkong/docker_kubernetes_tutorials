@@ -20,7 +20,13 @@ COPY . .
 # rmb EXPOSE do not do much 
 EXPOSE 80
 
-CMD ["node", "app.js"]
+# to utilise nodemon for live code update for backend code
+CMD ["npm", "start"]
+
+# add env variables for mongodb username and password (default)
+ENV MONGO_USERNAME=username
+
+ENV MONGO_PASSWORD=password
 
 # build the docker image in backend dir
 # docker build -t multi-container-node . 
