@@ -24,7 +24,10 @@ CMD [ "npm", "start" ]
 # create docker network
 # docker network create multi-container-net
 # run mongodb container with network (for data persistence use named volumes)
-# docker run --name mongodb -v data:/data/db --network multi-container-net --rm -d mongo
+# add security (using env variables to add username and password auth)
+# docker run --name mongodb -v data:/data/db --network multi-container-net 
+# -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password --rm -d mongo
+# update backend code to use username password to auth (in app.js)
 # update backend code to use container name instead of host.docker.internal
 # rebuild image (in backend code dir) 
 # docker build -t multi-container-node .
