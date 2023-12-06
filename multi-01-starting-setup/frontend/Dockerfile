@@ -45,4 +45,5 @@ CMD [ "npm", "start" ]
 # docker build -t multi-container-react .
 # run the frontend image (but keep the published port so that we can access from browser)
 # no need to use --network as the frontend code do not need to interact with node api or mongodb 
-# docker run --name multi-container-frontend --rm -d -p 3000:3000 multi-container-react
+# use bind mount for live code update
+# docker run --name multi-container-frontend -v /Users/ngyewkong/Docker_Kubernetes/multi-01-starting-setup/frontend/src:/app/src --rm -d -p 3000:3000 multi-container-react
