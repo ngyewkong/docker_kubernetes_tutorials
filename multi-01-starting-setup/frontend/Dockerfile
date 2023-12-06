@@ -23,8 +23,8 @@ CMD [ "npm", "start" ]
 # benefits: can use container name to communicate, do not need to expose port during docker run command
 # create docker network
 # docker network create multi-container-net
-# run mongodb container with network
-# docker run --name mongodb --network multi-container-net --rm -d mongo
+# run mongodb container with network (for data persistence use named volumes)
+# docker run --name mongodb -v data:/data/db --network multi-container-net --rm -d mongo
 # update backend code to use container name instead of host.docker.internal
 # rebuild image (in backend code dir) 
 # docker build -t multi-container-node .
