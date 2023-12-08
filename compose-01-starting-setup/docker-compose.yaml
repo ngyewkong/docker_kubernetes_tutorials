@@ -9,6 +9,9 @@
 # docker-compose down -v to remove also the volumes created
 # services name will be used by docker internally -> container names can still follow services name
 # despite actual container names created is following repo_name-service-name-number
+# docker-compose built images name follow repo_name-service-name
+# docker-compose up --build force rebuild of images
+# docker-compose build just build all the images in services not start containers
 version: "3.8"
 services:
   mongodb:
@@ -16,6 +19,8 @@ services:
     volumes:
       # syntax exactly the same when using cli to specify volumes
       - data:/data/db
+    # force container naming
+    container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
