@@ -1,0 +1,74 @@
+# set the version of compose format that docker-compose shld reference from
+# services is a keyword used by docker-compose
+# the individual container services name is all to you
+# to run docker-compose
+# make sure the cli path is cd to where the docker-compose.yaml is
+# docker-compose up -d to run in detached mode
+# docker-compose down to remove the container, network
+# docker volume ls to check volume still exist
+# docker-compose down -v to remove also the volumes created
+# services name will be used by docker internally -> container names can still follow services name
+# despite actual container names created is following repo_name-service-name-number
+# docker-compose built images name follow repo_name-service-name
+# docker-compose up --build force rebuild of images
+# docker-compose build just build all the images in services not start containers
+version: "3.8"
+services:
+  mongodb:
+    image: "mongo"
+    volumes:
+      # syntax exactly the same when using cli to specify volumes
+      - data:/data/db
+    # force container naming
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      # - MONGO)INITDB_ROOOT_USERNAME=max this syntax works as well
+    env_file:
+      # - dash is used when there is only one list of values only the single key-value pair do not need to use dash
+      # specify the file path of the env file from docker-compose.yaml dir
+      # good if we want to prevent env secrets from getting committed
+      - ./env/mongo.env
+      # networks:
+      #   - multi-container-network
+      # usually do not need to specify as docker-compose automatically add all services to same network
+      # unless adding to a pre-created custom network
+  backend:
+    # docker-compose will build based off the dir of the Dockerfile specified for this service
+    build: ./backend
+    # if Dockerfile specified is not the default naming convention Dockerfile
+    # need to use this longer form
+    # for context need to set the path of where the files needed to be copied into the image during docker build
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile-dev
+    #   args:
+    #     some-arg: some-value
+    ports:
+      - "80:80"
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app # can use relative path from docker-compose.yaml level for bind mounts
+      - /app/node_modules
+    env_file:
+      - ./env/backend.env
+    depends_on: # dependency on other container services that is needed to be up
+      - mongodb
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src # bind mount
+    stdin_open: true # for setting the container to set to iteractive mode
+    tty: true # for setting the container to set to iteractive mode
+    depends_on:
+      - backend
+# need to specify a volumes keyword
+# specify the named volume name to be created for the services
+# diff containers can use the same volume if services use the same named volume
+volumes:
+  data:
+  logs:
+  # bind mounts and anonymous volumes do not need to be specified in volumes section
