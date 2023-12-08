@@ -50,8 +50,16 @@ services:
       - ./env/backend.env
     depends_on: # dependency on other container services that is needed to be up
       - mongodb
-
-  #frontend:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/src:/app/src # bind mount
+    stdin_open: true # for setting the container to set to iteractive mode
+    tty: true # for setting the container to set to iteractive mode
+    depends_on:
+      - backend
 # need to specify a volumes keyword
 # specify the named volume name to be created for the services
 # diff containers can use the same volume if services use the same named volume
