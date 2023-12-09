@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  npm:
+    build: ./
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/app
+# docker-compose up init wont work
+# docker-compose run service_name allows us to run a single service
+# docker-compose run npm init
+# docker-compose run do not delete services automatically need use --rm flag
