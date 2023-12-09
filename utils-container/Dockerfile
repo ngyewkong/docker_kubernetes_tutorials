@@ -11,4 +11,5 @@ WORKDIR /app
 # anything in CMD will be overwritten
 # anything in ENTRYPOINT is appended ie ENTRYPOINT ["npm"] then we can 
 # docker build -t mynpm .
+# docker run -it -v /Users/ngyewkong/Docker_Kubernetes/utils-container:/app mynpm install express to install express dependency
 ENTRYPOINT [ "npm" ]
