@@ -25,5 +25,10 @@ services:
       - ./env/mysql.env
   # composer tool to setup the laravel app
   composer:
+    build:
+      context: ./dockerfiles
+      dockerfile: composer.dockerfile
+    volumes:
+      - ./src:/var/www/html
   # artisan:
   # npm:
