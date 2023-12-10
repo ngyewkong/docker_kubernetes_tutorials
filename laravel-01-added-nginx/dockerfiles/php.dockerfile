@@ -1,6 +1,6 @@
 # setup multiple dockerfiles for use in docker-compile
 # php-fpm needed for the nginx config file we using
-FROM php:7.4-fpm-alpine 
+FROM php:8.1-fpm-alpine 
 
 # set up the work dir
 # /var/www/html used in php to serve web pages
