@@ -1,5 +1,6 @@
 # docker-compose up -d server php mysql
 # docker-compose up -d server (using depends_on in docker-compose.yaml)
+# docker-compose up -d --build server (force docker to go through dockerfiles and rebuild if there is any changes)
 version: "3.8"
 
 services:
