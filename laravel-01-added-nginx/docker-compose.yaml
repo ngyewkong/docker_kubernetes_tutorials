@@ -1,3 +1,5 @@
+# docker-compose up -d server php mysql
+# docker-compose up -d server (using depends_on in docker-compose.yaml)
 version: "3.8"
 
 services:
@@ -6,7 +8,15 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro # bind mount used from the nginx image (specified in the documentation how to pass the conf file for nginx)
+      # server service require another bind mount for source code as reqs hits server first before directing to php interpreter
+      # /var/www/html is the default server path used in nginx.conf
+      - ./src:/var/www/html
+      # impt to bind to the container dir (etc/nginx/conf.d/default.conf:ro)
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro # bind mount used from the nginx image (specified in the documentation how to pass the conf file for nginx)
+    # to set the server dependency services
+    depends_on:
+      - php
+      - mysql
   php:
     build:
       context: ./dockerfiles
