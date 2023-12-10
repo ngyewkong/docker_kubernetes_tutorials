@@ -1,0 +1,76 @@
+# docker-compose up -d server php mysql
+# docker-compose up -d server (using depends_on in docker-compose.yaml)
+# docker-compose up -d --build server (force docker to go through dockerfiles and rebuild if there is any changes)
+version: "3.8"
+
+services:
+  server:
+    # image: "nginx:stable-alpine"
+    build:
+      # context matters for where the image is built
+      # if use ./dockerfiles for context -> src and nginx folder not reachable in the dockerfile
+      context: .
+      dockerfile: dockerfiles/nginx.dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+      # server service require another bind mount for source code as reqs hits server first before directing to php interpreter
+      # /var/www/html is the default server path used in nginx.conf
+      - ./src:/var/www/html
+      # impt to bind to the container dir (etc/nginx/conf.d/default.conf:ro)
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro # bind mount used from the nginx image (specified in the documentation how to pass the conf file for nginx)
+    # to set the server dependency services
+    depends_on:
+      - php
+      - mysql
+  php:
+    build:
+      context: .
+      dockerfile: dockerfiles/php.dockerfile
+    volumes:
+      # use the bind mount to allow php interpreter to access the source code
+      # using relative path (since using docker-compose)
+      # delegated keyword improves performance (the reflection of write to bind mounts will not be immediate - done in batches)
+      - ./src:/var/www/html:delegated
+    # we can do this but not needed if only need container to container communication
+    # ports:
+    #   - "3000:9000"
+  mysql:
+    # temp hack for mysql5.7 for m1 silicon
+    platform: linux/x86_64
+    image: mysql:5.7
+    env_file:
+      - ./env/mysql.env
+    ports:
+      - 3306:3306
+  # composer tool to setup the laravel app
+  # run only one service in docker-compose
+  # create the proj folder in standard root folder (/var/www/html dir)
+  # docker-compose run --rm composer create-project --prefer-dist laravel/laravel .
+  composer:
+    build:
+      context: ./dockerfiles
+      dockerfile: composer.dockerfile
+    volumes:
+      - ./src:/var/www/html
+  # artisan is util by laravel to run certain commands built on top of php
+  # docker-compose run --rm artisan migrate -> write some data to db and check if db setup works
+  artisan:
+    build:
+      context: .
+      dockerfile: dockerfiles/php.dockerfile
+    volumes:
+      - ./src:/var/www/html
+    # adding entrypoint cmd to the base dockerfile for artisan container
+    entrypoint: ["php", "/var/www/html/artisan"]
+  # npm did not use dockerfile
+  # for more complex commands like run or copy -> still need a dockerfile
+  # only for basic images that set entrypoint then inside docker-compose.yaml
+  # bind mounts only for dev, deployment to prod will not use
+  # use copy to copy the source code into the image used for deployment
+  npm:
+    image: node:14
+    working_dir: /var/www/html
+    entrypoint: ["npm"]
+    volumes:
+      - ./src:/var/www/html
