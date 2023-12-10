@@ -7,7 +7,19 @@ services:
       - "8000:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro # bind mount used from the nginx image (specified in the documentation how to pass the conf file for nginx)
-  # php:
+  php:
+    build:
+      context: ./dockerfiles
+      dockerfile: php.dockerfile
+    volumes:
+      # use the bind mount to allow php interpreter to access the source code
+      # using relative path (since using docker-compose)
+      # delegated keyword improves performance (the reflection of write to bind mounts will not be immediate - done in batches)
+      - ./src:/var/www/html:delegated
+    # we can do this but not needed if only need container to container communication
+    # ports:
+    #   - "3000:9000"
+
   # mysql:
   # composer:
   # artisan:
