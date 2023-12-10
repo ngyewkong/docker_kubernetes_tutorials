@@ -19,5 +19,9 @@ RUN docker-php-ext-install pdo pdo_mysql
 # for writting logs by default user
 RUN chown -R www-data:www-data /var/www/html
 
+RUN addgroup -g 1000 laravel && adduser -G laravel -g laravel -s /bin/sh -D laravel
+
+USER laravel
+
 # No CMD or ENTRYPT KEYWORDS
 # the default CMD used in the base image will be run
