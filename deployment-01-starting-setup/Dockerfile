@@ -26,3 +26,8 @@ CMD ["node", "app.js"]
 # docker buildx build --platform linux/amd64 -t ngyewkong/node-dep-example .
 # docker tag node-dep-example ngyewkong/node-dep-example (retag the name to match docker hub)
 # docker push ngyewkong/node-dep-example
+
+# disadvantages of diy remote deployment
+# self-managed (os security, networking, instances types etc)
+# annoying to deploy via ssh -> some automated solution is btr
+# go for more managed approach -> AWS ECS service for example
