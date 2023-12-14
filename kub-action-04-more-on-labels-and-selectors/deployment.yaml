@@ -1,0 +1,29 @@
+# kubectl delete deployments,services -l group=example to delete declaratively using label
+# note in k8s we use labels to target resources not name 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+  labels:
+    # add label to deployment 
+    group: example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-app
+      tier: backend
+    # using matchExpressions to have a more powerful filter match condition on the kv pairs
+    # matchExpressions: 
+    #   - {key: app, operator: NotIn, values: [second-app, first-app]}
+  template:
+    metadata: 
+      labels:
+        app: second-app
+        tier: backend
+    spec: 
+      containers:
+        - name: second-node
+          image: academind/kub-first-app:2
+        # - name: ...
+        #   image: ...
