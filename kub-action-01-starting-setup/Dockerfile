@@ -68,6 +68,13 @@
 # NAME                         READY   STATUS    RESTARTS      AGE
 # first-app-64597c9c8f-pvcq8   1/1     Running   3 (37s ago)   26m
 
+# for manual scaling in and out 
+# kubectl scale deployment/first-app --replicas=3 -> create 3 pods in total
+# NAME                         READY   STATUS    RESTARTS        AGE
+# first-app-64597c9c8f-5z6vm   1/1     Running   0               7s
+# first-app-64597c9c8f-pvcq8   1/1     Running   3 (3m50s ago)   29m
+# first-app-64597c9c8f-sbztw   1/1     Running   0               7s
+
 FROM node:14-alpine
 
 WORKDIR /app
