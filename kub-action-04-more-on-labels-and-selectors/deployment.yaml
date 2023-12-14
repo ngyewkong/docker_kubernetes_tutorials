@@ -25,6 +25,8 @@ spec:
       containers:
         - name: second-node
           image: ngyewkong/k8s-first-app:2
+          # force always image pull
+          imagePullPolicy: Always
           # good for applications that do not get handled by default health checks
           livenessProbe: 
             httpGet:
