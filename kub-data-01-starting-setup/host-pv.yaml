@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: host-pv
+spec:
+  capacity:
+    # set the storage size to 4Gb using 4Gi
+    storage: 4Gi
+  # filesystem or block storage for volumeMode
+  volumeMode: Filesystem
+  # what modes can be used (ReadWriteOnce -> for all pods on 1 node
+  # ReadOnlyMany -> can be claimed by multiple nodes not available for hostPath, ReadWriteMany)
+  accessModes:
+  - ReadWriteOnce
+  # to use the pv need to create a claim
+  persistentVolumeReclaimPolicy: Recycle
+  # must specify the storageClassName (using standard by default)
+  storageClassName: standard
+  # mountOptions:
+  # - hard
+  # - nfsvers=4.1
+  hostPath:
+    path: /data
+    type: DirectoryOrCreate

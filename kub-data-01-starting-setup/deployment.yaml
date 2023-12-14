@@ -14,26 +14,38 @@ spec:
         app: story
     spec:
       containers:
-        - name: story
-          image: ngyewkong/k8s-data-demo
-          imagePullPolicy: Always
-          volumeMounts:
-            # container internal path as determined by the app
-            - mountPath: /app/story
-              name: story-volume
-        # by default volume is pod specific when pod crashes -> volumes get deleted as well
-        # survives container restarts 
+      - name: story
+        image: ngyewkong/k8s-data-demo
+        imagePullPolicy: Always
+        volumeMounts:
+        # container internal path as determined by the app
+        - mountPath: /app/story
+          name: story-volume
+          # by default volume is pod specific when pod crashes -> volumes get deleted as well
+          # survives container restarts 
       volumes:
-        - name: story-volume
-        # using emptyDir type which create a new dir which survives container restarts
-        # downside of using emptyDir -> is pod specific volume is not shared across pods
-        # when a container in pod a crashes and restart is ongoing -> get req is getting routed to other pods replicas 
-        # but failed to open file as their pods do not have the file
-        # emptyDir: {}
-        # allows us expose a host machine path to all the pods for use for shared volumes
-        # however still does not resolve the problem of volumes across multiple host machines 
-          hostPath:
-          # this path is the path on host machine think bind mounts in docker which is being mounted to /app/story in container
-          # hostPath can also use to share existing data into a container as well
-            path: /data
-            type: DirectoryOrCreate # existing or create one if doesnt exist
+      - name: story-volume
+        # use Persistent Volume in deployment
+        persistentVolumeClaim:
+          # claim name using what is being set in host-pvc.yaml
+          claimName: host-vpc
+          # storage class (access via kubectl get sc)
+          # run kubetcl apply -f host-pv.yaml 
+          # kubectl apply -f host-pvc.yaml
+          # kubectl apply -f deployment.yaml
+          # kubectl get pv to get the persistent storage status
+          # kubectl get pvc to get the persistent storage
+      # using emptyDir type which create a new dir which survives container restarts
+      # downside of using emptyDir -> is pod specific volume is not shared across pods
+      # when a container in pod a crashes and restart is ongoing -> get req is getting routed to other pods replicas 
+      # but failed to open file as their pods do not have the file
+      # emptyDir: {}
+      # allows us expose a host machine path to all the pods for use for shared volumes
+      # however still does not resolve the problem of volumes across multiple host machines 
+      # hostPath:
+      # this path is the path on host machine think bind mounts in docker which is being mounted to /app/story in container
+      # hostPath can also use to share existing data into a container as well
+      # csi type -> cloud storage interface 
+      # used for building driver solutions so that k8s team do not need keep adding new volume types to support other providers
+      # path: /data
+      # type: DirectoryOrCreate # existing or create one if doesnt exist
