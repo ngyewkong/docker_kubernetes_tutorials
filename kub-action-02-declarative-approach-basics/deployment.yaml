@@ -4,12 +4,14 @@
 # spec -> how u want to set the deployment
 # to apply the yaml file
 # kubectl apply -f deployment.yaml
+# updating resources just need to make changes to the config.yaml files and just rerun kubectl apply -f config.yaml
+# deleting resources kubectl delete -f deployment.yaml -f service.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: second-app-deployment
 spec:
-  replicas: 1
+  replicas: 3
   # selector is impt key in k8s
   selector:
   # since pods are dynamically created and deleted 

@@ -1,4 +1,5 @@
 # separate yaml file for Service object
+# kubectl apply -f service.yaml
 apiVersion: v1
 kind: Service
 metadata:
