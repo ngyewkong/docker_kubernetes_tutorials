@@ -24,6 +24,13 @@ spec:
     spec: 
       containers:
         - name: second-node
-          image: academind/kub-first-app:2
-        # - name: ...
-        #   image: ...
+          image: ngyewkong/k8s-first-app:2
+          # good for applications that do not get handled by default health checks
+          livenessProbe: 
+            httpGet:
+              path: /
+              port: 8080
+            # how often the liveness check is performed in seconds 
+            periodSeconds: 10
+            # how long the initial delay for liveness check is in seconds
+            initialDelaySeconds: 5
