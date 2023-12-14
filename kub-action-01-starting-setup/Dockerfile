@@ -83,6 +83,18 @@
 # kubectl rollout status deployment/first-app
 # deployment "first-app" successfully rolled out
 
+# k8s use rolling update strategy -> if image pulled is not working the old pod will not get terminated before new pod is up and running
+# NAME                         READY   STATUS             RESTARTS   AGE
+# first-app-79f979b9bd-99flm   0/1     ImagePullBackOff   0          57s
+# first-app-f9df445-rzhlb      1/1     Running            0          5m26s
+# rollback mechanism
+# kubectl rollout undo deployment/first-app (undo the latest failing deployment)
+# deployment.apps/first-app rolled back
+# check on rollout history
+# kubectl rollout history deployment/first-app
+# kubectl rollout history deployment/first-app --revision=3 -> to get more info on the pod template
+# rollback to specific revision
+# kubectl rollout undo deployment/first-app --to-revision=1
 
 FROM node:14-alpine
 
