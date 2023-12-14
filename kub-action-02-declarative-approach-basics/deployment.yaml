@@ -1,21 +1,38 @@
+# apiVersion is based off k8s doc
+# kind can be Deployment / Service / Job etc
+# metadata -> important info like setting the name of the deployment
+# spec -> how u want to set the deployment
+# to apply the yaml file
+# kubectl apply -f deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: second-app-deployment
 spec:
   replicas: 1
+  # selector is impt key in k8s
   selector:
+  # since pods are dynamically created and deleted 
+  # matchLabels or matchExpressions can be used for selector
     matchLabels:
+      # add the labels to know which pods this deployment shld have control over
+      # this below means all pods with labels app: second-app and tier: backend is controlled by this deployment
       app: second-app
       tier: backend
+  # template for defining the pods needed for this deployment
+  # template always refer to pod do not need to add kind kv pair
   template:
+  # metadata -> new object pod
     metadata: 
       labels:
         app: second-app
         tier: backend
+  # spec the pod 
     spec: 
+  # configure the pod
       containers:
         - name: second-node
-          image: academind/kub-first-app:2
-        # - name: ...
-        #   image: ...
+          image: ngyewkong/k8s-first-app:2
+      # second container below  
+      # - name: ...
+      #   image: ...
