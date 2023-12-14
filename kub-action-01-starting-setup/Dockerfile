@@ -75,6 +75,15 @@
 # first-app-64597c9c8f-pvcq8   1/1     Running   3 (3m50s ago)   29m
 # first-app-64597c9c8f-sbztw   1/1     Running   0               7s
 
+# update deployment with a new image
+# do the usual docker build and push to repo
+# kubectl set image deployment/deploymentName containerName=newImage only works with diff tag
+# kubectl set image deployment/first-app k8s-first-app=ngyewkong/k8s-first-app:2
+# deployment.apps/first-app image updated
+# kubectl rollout status deployment/first-app
+# deployment "first-app" successfully rolled out
+
+
 FROM node:14-alpine
 
 WORKDIR /app
