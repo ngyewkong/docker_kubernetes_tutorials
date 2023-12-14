@@ -1,0 +1,41 @@
+# combining multiple yaml files into one
+# eg service and deployment.yaml
+# kubectl apply -f master-deployment.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector: 
+    app: second-app
+  ports:
+    - protocol: 'TCP'
+      port: 80
+      targetPort: 8080
+    # - protocol: 'TCP'
+    #   port: 443
+    #   targetPort: 443
+  type: LoadBalancer
+# IMPORTANT TO HAVE "---" as it is the separator for service and deployment object using yaml syntax
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-app
+      tier: backend
+  template:
+    metadata: 
+      labels:
+        app: second-app
+        tier: backend
+    spec: 
+      containers:
+        - name: second-node
+          image: ngyewkong/k8s-first-app:2
+        # - name: ...
+        #   image: ...
