@@ -1,0 +1,38 @@
+# kubectl delete deployments,services -l group=example to delete declaratively using label
+# note in k8s we use labels to target resources not name 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+  labels:
+    # add label to deployment 
+    group: example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-app
+      tier: backend
+    # using matchExpressions to have a more powerful filter match condition on the kv pairs
+    # matchExpressions: 
+    #   - {key: app, operator: NotIn, values: [second-app, first-app]}
+  template:
+    metadata: 
+      labels:
+        app: second-app
+        tier: backend
+    spec: 
+      containers:
+        - name: second-node
+          image: ngyewkong/k8s-first-app:2
+          # force always image pull
+          imagePullPolicy: Always
+          # good for applications that do not get handled by default health checks
+          livenessProbe: 
+            httpGet:
+              path: /
+              port: 8080
+            # how often the liveness check is performed in seconds 
+            periodSeconds: 10
+            # how long the initial delay for liveness check is in seconds
+            initialDelaySeconds: 5

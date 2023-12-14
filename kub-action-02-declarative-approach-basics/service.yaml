@@ -1,0 +1,24 @@
+# separate yaml file for Service object
+# kubectl apply -f service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+# selector to identify other resources to be controlled by this resource
+# in this case to expose the pod for network communication
+  selector: 
+  # can only matchLabels here so just need kv pair
+    app: second-app
+  # what ports to be open and what protocol
+  ports:
+    - protocol: 'TCP'
+      # port used to expose to the IP
+      port: 80
+      # target port that is used by the container
+      targetPort: 8080
+    # - protocol: 'TCP'
+    #   port: 443
+    #   targetPort: 443
+  # type can be ClusterIP (internal cluster networking), NodePort & LoadBalancer
+  type: LoadBalancer
