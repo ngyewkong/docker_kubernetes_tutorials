@@ -14,5 +14,16 @@ spec:
         app: story
     spec:
       containers:
-      - name: story
-        image: ngyewkong/k8s-data-demo
+        - name: story
+          image: ngyewkong/k8s-data-demo
+          imagePullPolicy: Always
+          volumeMounts:
+            # container internal path as determined by the app
+            - mountPath: /app/story
+              name: story-volume
+        # by default volume is pod specific when pod crashes -> volumes get deleted as well
+        # survives container restarts
+      volumes:
+        - name: story-volume
+        # using emptyDir type which create a new dir which survives container restarts
+          emptyDir: {}
