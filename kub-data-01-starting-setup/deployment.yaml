@@ -17,6 +17,18 @@ spec:
       - name: story
         image: ngyewkong/k8s-data-demo
         imagePullPolicy: Always
+        env:
+        # set env to ref configMap yaml file
+        - name: STORY_DIR
+          valueFrom:
+            configMapKeyRef:
+              # this follow the name set in config.yaml
+              # key ref the key in config.yaml
+              name: data-store-env
+              key: folder
+        # set up your kv pair that you need for env var
+        # - name: STORY_DIR
+        #   value: 'story'
         volumeMounts:
         # container internal path as determined by the app
         - mountPath: /app/story

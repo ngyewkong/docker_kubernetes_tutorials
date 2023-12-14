@@ -1,0 +1,10 @@
+# create a configMap resource object
+# which is a list of kv pair
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-store-env
+  # note it is using data and not spec key
+data:
+  folder: 'story'
+  another_key: 'another_value'
