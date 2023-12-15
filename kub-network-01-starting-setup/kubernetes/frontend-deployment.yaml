@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ngyewkong/k8s-frontend-demo:latest
+# kubectl delete -f ../kubernetes/frontend-deployment.yaml (do not need to delete the service object)
+# good as ip wont change

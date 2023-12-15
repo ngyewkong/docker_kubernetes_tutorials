@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-service
+spec:
+  selector:
+    app: users
+  type: LoadBalancer
+  ports:
+  # users-app.js container is exposing 8080 port (targetPort)
+  # expose to ext on port 8088
+  - protocol: TCP
+    port: 8088
+    targetPort: 8080
+# service file not edited to add auth-service
+# we do not want auth-api to be reachable from the external world
+# only internal pod comm with users-api for user auth

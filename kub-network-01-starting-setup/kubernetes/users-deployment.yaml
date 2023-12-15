@@ -1,0 +1,39 @@
+# create yaml file for users container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+      - name: users
+        image: ngyewkong/k8s-network-users:latest
+        env:
+        # for internal pod comm between containers in the same pod
+        # to target the add can just use localhost (for same pod)
+        # but since we separate the auth-api
+        # we need to get the internal IP address from auth-api
+        # kubectl get services and use the cluster ip of auth-service
+        # convenient way using k8s generated env var from services
+        - name: AUTH_ADD
+          # value: "10.96.230.11"
+          # using CoreDNS functionality that use create cluster internal domain names 
+          # which are known within inside the same cluster
+          # namespaces are groups to differentiate teams in the same cluster 
+          # access via kubectl get namespaces
+          # using serviceName.namespacesName as ref
+          value: auth-service.default
+      # adding another container in the same pod using one deployment.yaml
+      # use the latest image
+      # comment out as we want a separate pod for auth-api to better ensure the api is not exposed to public
+      # - name: auth
+      #   image: ngyewkong/k8s-auth-demo:latest
+

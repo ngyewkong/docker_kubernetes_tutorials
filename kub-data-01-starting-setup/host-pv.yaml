@@ -13,7 +13,6 @@ spec:
   accessModes:
   - ReadWriteOnce
   # to use the pv need to create a claim
-  persistentVolumeReclaimPolicy: Recycle
   # must specify the storageClassName (using standard by default)
   storageClassName: standard
   # mountOptions:

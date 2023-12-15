@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-deployment
+spec:
+  selector:
+    matchLabels:
+      app: tasks
+  template:
+    metadata:
+      labels:
+        app: tasks
+    spec:
+      containers:
+      - name: tasks
+        image: ngyewkong/k8s-tasks-demo:latest
+        env:
+        - name: AUTH_ADD
+          value: "auth-service.default"
+        # rmb the tasks-api has more than one env var
+        - name: TASKS_FOLDER
+          value: tasks
+# kubectl exec -it tasks-deployment-6c99557496-r2t6h -- sh
+# to create the tasks folder 
