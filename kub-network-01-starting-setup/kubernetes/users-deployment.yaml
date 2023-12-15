@@ -15,8 +15,14 @@ spec:
     spec:
       containers:
       - name: users
-        image: ngyewkong/k8s-network-users
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        image: ngyewkong/k8s-network-users:latest
+        env:
+        # for internal pod comm between containers in the same pod
+        # to target the add can just use localhost
+        - name: AUTH_ADD
+          value: localhost
+      # adding another container in the same pod using one deployment.yaml
+      # use the latest image
+      - name: auth
+        image: ngyewkong/k8s-auth-demo:latest
+

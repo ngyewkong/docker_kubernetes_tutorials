@@ -12,3 +12,6 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 8080
+# service file not edited to add auth-service
+# we do not want auth-api to be reachable from the external world
+# only internal pod comm with users-api for user auth
