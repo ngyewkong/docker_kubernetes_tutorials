@@ -8,9 +8,9 @@ spec:
   type: LoadBalancer
   ports:
   # users-app.js container is exposing 8080 port (targetPort)
-  # expose to ext on port 80
+  # expose to ext on port 8088
   - protocol: TCP
-    port: 80
+    port: 8088
     targetPort: 8080
 # service file not edited to add auth-service
 # we do not want auth-api to be reachable from the external world

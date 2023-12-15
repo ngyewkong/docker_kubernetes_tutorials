@@ -18,11 +18,16 @@ spec:
         image: ngyewkong/k8s-network-users:latest
         env:
         # for internal pod comm between containers in the same pod
-        # to target the add can just use localhost
+        # to target the add can just use localhost (for same pod)
+        # but since we separate the auth-api
+        # we need to get the internal IP address from auth-api
+        # kubectl get services and use the cluster ip of auth-service
+        # convenient way using k8s generated env var from services
         - name: AUTH_ADD
-          value: localhost
+          value: "10.96.230.11"
       # adding another container in the same pod using one deployment.yaml
       # use the latest image
-      - name: auth
-        image: ngyewkong/k8s-auth-demo:latest
+      # comment out as we want a separate pod for auth-api to better ensure the api is not exposed to public
+      # - name: auth
+      #   image: ngyewkong/k8s-auth-demo:latest
 
