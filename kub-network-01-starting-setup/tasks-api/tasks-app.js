@@ -11,6 +11,14 @@ const app = express();
 
 app.use(bodyParser.json());
 
+// to allow for cors
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  next();
+});
+
 const extractAndVerifyToken = async (headers) => {
   if (!headers.authorization) {
     throw new Error("No token provided.");
