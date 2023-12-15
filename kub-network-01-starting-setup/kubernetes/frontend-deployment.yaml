@@ -14,3 +14,5 @@ spec:
       containers:
       - name: frontend
         image: ngyewkong/k8s-frontend-demo:latest
+# kubectl delete -f ../kubernetes/frontend-deployment.yaml (do not need to delete the service object)
+# good as ip wont change

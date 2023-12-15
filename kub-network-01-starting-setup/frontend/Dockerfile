@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build
 
 FROM nginx:1.19-alpine
-
+# multi stage build using builder from earlier stage
 COPY --from=builder /app/build /usr/share/nginx/html
 
 COPY conf/nginx.conf /etc/nginx/conf.d/default.conf
