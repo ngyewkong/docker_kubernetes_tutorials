@@ -1,3 +1,4 @@
+# combining service and deployment yaml files into one single file
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,9 +8,9 @@ spec:
     app: auth
   type: ClusterIP
   ports:
-    - protocol: TCP
-      port: 3000
-      targetPort: 3000
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -26,8 +27,8 @@ spec:
         app: auth
     spec:
       containers:
-        - name: auth-api
-          image: academind/kub-dep-auth:latest
-          env:
-            - name: TOKEN_KEY
-              value: 'shouldbeverysecure'
+      - name: auth-api
+        image: ngyewkong/k8s-dep-auth:latest
+        env:
+        - name: TOKEN_KEY
+          value: 'shouldbeverysecure'

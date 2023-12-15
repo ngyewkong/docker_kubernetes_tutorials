@@ -1,3 +1,4 @@
+# combining service and deployment yaml files into one single file
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,9 +8,9 @@ spec:
     app: users
   type: LoadBalancer
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -26,10 +27,12 @@ spec:
         app: users
     spec:
       containers:
-        - name: users-api
-          image: academind/kub-dep-users:latest
-          env:
-            - name: MONGODB_CONNECTION_URI
-              value: 'mongodb+srv://maximilian:wk4nFupsbntPbB3l@cluster0.ntrwp.mongodb.net/users?retryWrites=true&w=majority'
-            - name: AUTH_API_ADDRESSS
-              value: 'auth-service.default:3000'
+      - name: users-api
+        image: ngyewkong/k8s-dep-users:latest
+        env:
+        # using mongodb atlas to setup mongodb
+        - name: MONGODB_CONNECTION_URI
+          value: 'mongodb+srv://admin:VCv9g8wlkjqu7JTf@cluster0.fgwtbfz.mongodb.net/?retryWrites=true&w=majority'
+        # using auth service name to ref the coredns of auth-service
+        - name: AUTH_API_ADD
+          value: 'auth-service.default:3000'
