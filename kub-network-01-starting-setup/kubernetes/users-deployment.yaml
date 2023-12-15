@@ -24,7 +24,13 @@ spec:
         # kubectl get services and use the cluster ip of auth-service
         # convenient way using k8s generated env var from services
         - name: AUTH_ADD
-          value: "10.96.230.11"
+          # value: "10.96.230.11"
+          # using CoreDNS functionality that use create cluster internal domain names 
+          # which are known within inside the same cluster
+          # namespaces are groups to differentiate teams in the same cluster 
+          # access via kubectl get namespaces
+          # using serviceName.namespacesName as ref
+          value: auth-service.default
       # adding another container in the same pod using one deployment.yaml
       # use the latest image
       # comment out as we want a separate pod for auth-api to better ensure the api is not exposed to public
